@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mpi_save_result_picture_file_null_error">Ошибка записи в директории %1$s: невозможно создать файл. Необходимы права на запись.</string>
+    <string name="mpi_permissions_external_storage">Для корректной работы с камерой Вы должны предоставить приложению доступ к фото и мультимедиа файлам на данном устройстве</string>
+</resources>

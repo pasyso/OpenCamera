@@ -18,9 +18,6 @@ by Almalence Inc. All Rights Reserved.
 
 package com.almalence.ui.Switch;
 
-import com.almalence.ui.Switch.AllCapsTransformationMethod;
-import com.almalence.ui.Switch.TransformationMethodCompat2;
-
 /* <!-- +++
  import com.almalence.opencam_plus.R;
  +++ --> */
@@ -154,7 +151,7 @@ public class Switch extends CompoundButton
 	 */
 	public Switch(Context context, AttributeSet attrs)
 	{
-		this(context, attrs, R.attr.switchStyle);
+		this(context, attrs, R.attr.ocSwitchStyle);
 	}
 
 	/**
@@ -179,18 +176,18 @@ public class Switch extends CompoundButton
 		Resources res = getResources();
 		mTextPaint.density = res.getDisplayMetrics().density;
 
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Switch, defStyle, 0);
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OcSwitch, defStyle, 0);
 
-		mThumbDrawable = a.getDrawable(R.styleable.Switch_thumb);
-		mTrackDrawable = a.getDrawable(R.styleable.Switch_track);
-		mTextOn = a.getText(R.styleable.Switch_textOn);
-		mTextOff = a.getText(R.styleable.Switch_textOff);
-		mThumbTextPadding = a.getDimensionPixelSize(R.styleable.Switch_thumbTextPadding, 0);
-		mSwitchMinWidth = a.getDimensionPixelSize(R.styleable.Switch_switchMinWidth, 0);
-		mSwitchMinHeight = a.getDimensionPixelSize(R.styleable.Switch_switchMinHeight, 0);
-		mSwitchPadding = a.getDimensionPixelSize(R.styleable.Switch_switchPadding, 0);
+		mThumbDrawable = a.getDrawable(R.styleable.OcSwitch_ocThumb);
+		mTrackDrawable = a.getDrawable(R.styleable.OcSwitch_ocTrack);
+		mTextOn = a.getText(R.styleable.OcSwitch_ocTextOn);
+		mTextOff = a.getText(R.styleable.OcSwitch_ocTextOff);
+		mThumbTextPadding = a.getDimensionPixelSize(R.styleable.OcSwitch_ocThumbTextPadding, 0);
+		mSwitchMinWidth = a.getDimensionPixelSize(R.styleable.OcSwitch_ocSwitchMinWidth, 0);
+		mSwitchMinHeight = a.getDimensionPixelSize(R.styleable.OcSwitch_ocSwitchMinHeight, 0);
+		mSwitchPadding = a.getDimensionPixelSize(R.styleable.OcSwitch_ocSwitchPadding, 0);
 
-		int appearance = a.getResourceId(R.styleable.Switch_switchTextAppearance, 0);
+		int appearance = a.getResourceId(R.styleable.OcSwitch_ocSwitchTextAppearance, 0);
 		if (appearance != 0)
 		{
 			setSwitchTextAppearance(context, appearance);
@@ -225,12 +222,12 @@ public class Switch extends CompoundButton
 	 */
 	public void setSwitchTextAppearance(Context context, int resid)
 	{
-		TypedArray appearance = context.obtainStyledAttributes(resid, R.styleable.TextAppearanceSwitch);
+		TypedArray appearance = context.obtainStyledAttributes(resid, R.styleable.OcTextAppearanceSwitch);
 
 		ColorStateList colors;
 		int ts;
 
-		colors = appearance.getColorStateList(R.styleable.TextAppearanceSwitch_textColor);
+		colors = appearance.getColorStateList(R.styleable.OcTextAppearanceSwitch_textColor);
 		if (colors != null)
 		{
 			mTextColors = colors;
@@ -241,7 +238,7 @@ public class Switch extends CompoundButton
 			mTextColors = getTextColors();
 		}
 
-		ts = appearance.getDimensionPixelSize(R.styleable.TextAppearanceSwitch_textSize, 0);
+		ts = appearance.getDimensionPixelSize(R.styleable.OcTextAppearanceSwitch_textSize, 0);
 		if (ts != 0)
 		{
 			if (ts != mTextPaint.getTextSize())
@@ -253,12 +250,12 @@ public class Switch extends CompoundButton
 
 		int typefaceIndex, styleIndex;
 
-		typefaceIndex = appearance.getInt(R.styleable.TextAppearanceSwitch_typeface, -1);
-		styleIndex = appearance.getInt(R.styleable.TextAppearanceSwitch_textStyle, -1);
+		typefaceIndex = appearance.getInt(R.styleable.OcTextAppearanceSwitch_typeface, -1);
+		styleIndex = appearance.getInt(R.styleable.OcTextAppearanceSwitch_textStyle, -1);
 
 		setSwitchTypefaceByIndex(typefaceIndex, styleIndex);
 
-		boolean allCaps = appearance.getBoolean(R.styleable.TextAppearanceSwitch_textAllCaps, false);
+		boolean allCaps = appearance.getBoolean(R.styleable.OcTextAppearanceSwitch_textAllCaps, false);
 		if (allCaps)
 		{
 			mSwitchTransformationMethod = new AllCapsTransformationMethod(getContext());

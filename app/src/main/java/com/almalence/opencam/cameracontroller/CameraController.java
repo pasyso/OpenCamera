@@ -393,6 +393,8 @@ public class CameraController implements Camera.PictureCallback, Camera.AutoFocu
 	protected static int							iPreviewHeight;
 
 	public static final int							MIN_MPIX_SUPPORTED				= 1280 * 720; //Image sizes less than this will be discarded from settings
+	//PS
+	public static final int							MAX_MPIX_SUPPORTED				= 6 * 1000000; //Image sizes more than this will be discarded from settings
 
 	// Lists of resolutions, their indexes and names (for capturing and preview)
 	protected static List<Long>						ResolutionsMPixList;
@@ -583,7 +585,7 @@ public class CameraController implements Camera.PictureCallback, Camera.AutoFocu
 				put(CameraParameters.SCENE_MODE_SPORTS, sceneSports);
 				put(CameraParameters.SCENE_MODE_PARTY, sceneParty);
 				put(CameraParameters.SCENE_MODE_CANDLELIGHT, sceneCandlelight);
-				put(CameraParameters.SCENE_MODE_BARCODE, sceneBarcode);
+//				put(CameraParameters.SCENE_MODE_BARCODE, sceneBarcode);
 			}
 		};
 
@@ -605,7 +607,7 @@ public class CameraController implements Camera.PictureCallback, Camera.AutoFocu
 				put(sceneSports, CameraParameters.SCENE_MODE_SPORTS);
 				put(sceneParty, CameraParameters.SCENE_MODE_PARTY);
 				put(sceneCandlelight, CameraParameters.SCENE_MODE_CANDLELIGHT);
-				put(sceneBarcode, CameraParameters.SCENE_MODE_BARCODE);
+//				put(sceneBarcode, CameraParameters.SCENE_MODE_BARCODE);
 			}
 		};
 
@@ -1603,6 +1605,8 @@ public class CameraController implements Camera.PictureCallback, Camera.AutoFocu
 		boolean isFast = false;
 
 		Long lmpix = (long) currSizeWidth * currSizeHeight;
+		if (lmpix > CameraController.MAX_MPIX_SUPPORTED) return;//PS
+
 		float mpix = (float) lmpix / 1000000.f;
 		float ratio = (float) ((float) currSizeWidth / (float) currSizeHeight);
 
@@ -3677,7 +3681,7 @@ public class CameraController implements Camera.PictureCallback, Camera.AutoFocu
 
 							// Nothing to do, if newMode and currentMode are
 							// equals.
-							if (currentFlash.equals(CameraController.mode_flash.get(mode)))
+							if (currentFlash == null || currentFlash.equals(CameraController.mode_flash.get(mode)))
 							{
 								return;
 							}

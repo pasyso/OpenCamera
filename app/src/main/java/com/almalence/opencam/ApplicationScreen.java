@@ -24,6 +24,7 @@ package com.almalence.opencam;
 //-+- -->
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +92,7 @@ import com.almalence.opencam.R;
 
 import com.almalence.sony.cameraremote.SimpleStreamSurfaceView;
 import com.almalence.util.Util;
+import com.untwinedsolutions.base.provider.contentprovider.MpiMediaStore;
 
 /***
  * ApplicationScreen - main activity screen with camera functionality
@@ -278,9 +280,56 @@ abstract public class ApplicationScreen extends Activity implements ApplicationI
 	private final static int			STORAGE_PERMISSION_CODE			= 3;
 	protected static boolean			storagePermissionGranted		= false;
 
+	//mpi code start
+	public static final String EXTRA_SURVEY_ID = "extra:surveyId";
+	public static final String EXTRA_MODEL_ID = "extra:modelId";
+	public static final String EXTRA_URI = "extra:Uri";
+	public static final String EXTRA_BUCKET_NAME = "extra:bucketName";
+	public static final String EXTRA_MODE = "extra:mode";
+	public static String saveToPath = null;
+	public static String shutterMode = "photo";
+	private String mSurveyId = null;
+	private Serializable mModelKey;
+	private Uri	mMainUri;
+	private String mBucketName;
+
+	public Uri getMainUri() {
+		return mMainUri;
+	}
+
+	public String getBucketName() { return mBucketName; }
+
+	private void onMpiCreate(Bundle savedInstanceState) {
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			mSurveyId = extras.getString(EXTRA_SURVEY_ID, null);
+			mModelKey = extras.getSerializable(EXTRA_MODEL_ID);
+			mMainUri = extras.getParcelable(EXTRA_URI);
+//			if (mMainUri != null) Log.d("ApplicationScreen", "mMainUri = " + mMainUri);
+			mBucketName = extras.getString(EXTRA_BUCKET_NAME, null);
+			saveToPath = MpiMediaStore.Media.getStorageDirPath(this, mMainUri);
+			shutterMode = extras.getString(EXTRA_MODE, "photo");
+//			Log.d("ApplicationScreen", "saveToPath = " + saveToPath);
+//            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//			String path2 = prefs.getString(MainScreen.sSavePathPref, Environment.getExternalStorageDirectory()
+//					.getAbsolutePath());
+//			prefs.edit().putString(MainScreen.sSavePathPref, saveToPath).apply();
+		}
+//		shutterMode = "video";
+		ConfigParser.getInstance().setVideoModeEnabled(isVideoEnabled());
+		if (saveToPath == null) {
+			saveToPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+		}
+	}
+	public static boolean isVideoEnabled() {
+		return !"photo".equals(shutterMode);
+	}
+	//mpi code end
+
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		onMpiCreate(savedInstanceState);//mpi code
 
 		sEvPref = getResources().getString(R.string.Preference_EvCompensationValue);
 		sSceneModePref = getResources().getString(R.string.Preference_SceneModeValue);

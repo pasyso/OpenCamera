@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="switch_dark">
-        <item name="track">@drawable/switch_track_holo_dark</item>
-        <item name="thumb">@drawable/switch_inner_holo_dark</item>
-        <item name="textOn">@string/textOn</item>
-        <item name="textOff">@string/textOff</item>
-        <item name="thumbTextPadding">3dip</item>
-        <item name="switchMinWidth">48dip</item>
-        <item name="switchMinHeight">24dip</item>
-        <item name="switchPadding">4dip</item>
-        <item name="switchTextAppearance">@style/TextAppearance</item>
+    <style name="OcSwitch_dark">
+        <item name="ocTrack">@drawable/switch_track_holo_dark</item>
+        <item name="ocThumb">@drawable/switch_inner_holo_dark</item>
+        <item name="ocTextOn">@string/textOn</item>
+        <item name="ocTextOff">@string/textOff</item>
+        <item name="ocThumbTextPadding">3dip</item>
+        <item name="ocSwitchMinWidth">48dip</item>
+        <item name="ocSwitchMinHeight">24dip</item>
+        <item name="ocSwitchPadding">4dip</item>
+        <item name="ocSwitchTextAppearance">@style/OcTextAppearance</item>
     </style>
     
-    <style name="switch_light">
-        <item name="track">@drawable/switch_track_holo_light</item>
-        <item name="thumb">@drawable/switch_inner_holo_light</item>
-        <item name="textOn">@string/textOn</item>
-        <item name="textOff">@string/textOff</item>
-        <item name="thumbTextPadding">3dip</item>
-        <item name="switchMinWidth">48dip</item>
-        <item name="switchMinHeight">24dip</item>
-        <item name="switchPadding">4dip</item>
-        <item name="switchTextAppearance">@style/TextAppearance</item>
+    <style name="OcSwitch_light">
+        <item name="ocTrack">@drawable/switch_track_holo_light</item>
+        <item name="ocThumb">@drawable/switch_inner_holo_light</item>
+        <item name="ocTextOn">@string/textOn</item>
+        <item name="ocTextOff">@string/textOff</item>
+        <item name="ocThumbTextPadding">3dip</item>
+        <item name="ocSwitchMinWidth">48dip</item>
+        <item name="ocSwitchMinHeight">24dip</item>
+        <item name="ocSwitchPadding">4dip</item>
+        <item name="ocSwitchTextAppearance">@style/OcTextAppearance</item>
     </style>    	
    
-    <style name="TextAppearance">
+    <style name="OcTextAppearance">
         <item name="textColor">?android:attr/textColorPrimary</item>
         <item name="textColorHighlight">?android:attr/textColorHighlight</item>
         <item name="textColorHint">?android:attr/textColorHint</item>

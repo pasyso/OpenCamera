@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.annotation.TargetApi;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -84,10 +85,13 @@ import com.almalence.util.Util;
  +++ --> */
 //<!-- -+-
 import com.almalence.opencam.cameracontroller.CameraController;
+import com.untwinedsolutions.base.provider.contentprovider.MpiMediaStore;
 //-+- -->
 
 public class SavingService extends NotificationService
 {
+    private static final String TAG = SavingService.class.getSimpleName();
+    private static final boolean LOCAL_LOG = false;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid)
@@ -166,10 +170,11 @@ public class SavingService extends NotificationService
 		enableExifTagOrientation = prefs.getBoolean(ApplicationScreen.sEnableExifOrientationTagPref, true);
 		additionalRotation = Integer.parseInt(prefs.getString(ApplicationScreen.sAdditionalRotationPref, "0"));
 
-		saveToPath = prefs.getString(MainScreen.sSavePathPref, Environment.getExternalStorageDirectory()
-				.getAbsolutePath());
-		saveToPreference = prefs.getString(MainScreen.sSaveToPref, "0");
-		sortByData = prefs.getBoolean(MainScreen.sSortByDataPref, false);
+//		saveToPath = prefs.getString(MainScreen.sSavePathPref, Environment.getExternalStorageDirectory()
+//				.getAbsolutePath());
+//		saveToPreference = prefs.getString(MainScreen.sSaveToPref, "0");
+		saveToPath = ApplicationScreen.saveToPath;
+		sortByData = false;//prefs.getBoolean(MainScreen.sSortByDataPref, false);
 
 		switch (additionalRotation)
 		{
@@ -201,7 +206,7 @@ public class SavingService extends NotificationService
 		{
 			File saveDir = getSaveDir(false);
 
-			Calendar d = Calendar.getInstance();
+//			Calendar d = Calendar.getInstance();
 
 			int imagesAmount = Integer.parseInt(getFromSharedMem("amountofresultframes" + Long.toString(sessionID)));
 
@@ -526,8 +531,10 @@ public class SavingService extends NotificationService
 					modifiedFile.delete();
 				}
 
-				Uri uri = getApplicationContext().getContentResolver()
-						.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+				ContentResolver cr = getApplicationContext().getContentResolver();
+				Uri uri = cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+				MpiMediaStore.addImage(cr, uri.getLastPathSegment(), values.getAsString(ImageColumns.DATA),
+						values.getAsString(ImageColumns.TITLE), MainScreen.instance.getBucketName());
 				broadcastNewPicture(uri);
 			}
 
@@ -602,18 +609,23 @@ public class SavingService extends NotificationService
 				fileFormat += idx;
 
 				DocumentFile file = null;
-				if (ApplicationScreen.getForceFilename() == null)
-				{
-					if (hasDNGResult)
-					{
-						file = saveDir.createFile("image/x-adobe-dng", fileFormat + ".dng");
-					} else
-					{
-						file = saveDir.createFile("image/jpeg", fileFormat);
-					}
-				} else
-				{
-					file = DocumentFile.fromFile(ApplicationScreen.getForceFilename());
+				try {
+				    if (ApplicationScreen.getForceFilename() == null)
+				    {
+					    if (hasDNGResult)
+					    {
+						    file = saveDir.createFile("image/x-adobe-dng", fileFormat + ".dng");
+					    } else
+					    {
+						    file = saveDir.createFile("image/jpeg", fileFormat);
+					    }
+				    } else
+				    {
+					    file = DocumentFile.fromFile(ApplicationScreen.getForceFilename());
+				    }
+				} catch (Exception e) {
+					Toast.makeText(getApplicationContext(), getString(R.string.mpi_save_result_picture_file_null_error) + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
+					return;
 				}
 
 				// Create buffer image to deal with exif tags.
@@ -790,16 +802,22 @@ public class SavingService extends NotificationService
 				if (!enableExifTagOrientation)
 					exif_orientation = ExifInterface.ORIENTATION_NORMAL;
 
-				values = new ContentValues();
-				values.put(
-						ImageColumns.TITLE,
-						file.getName().substring(
-								0,
-								file.getName().lastIndexOf(".") >= 0 ? file.getName().lastIndexOf(".") : file.getName()
-										.length()));
+                DocumentFile parent = file.getParentFile();
+                String path = parent.toString().toLowerCase();
+                String name = parent.getName().toLowerCase();
+
+                values = new ContentValues();
+                String title = file.getName().substring(0,
+                        file.getName().lastIndexOf(".") >= 0 ? file.getName().lastIndexOf(".") : file.getName().length());
+                values.put(ImageColumns.TITLE, title);
 				values.put(ImageColumns.DISPLAY_NAME, file.getName());
 				values.put(ImageColumns.DATE_TAKEN, System.currentTimeMillis());
 				values.put(ImageColumns.MIME_TYPE, "image/jpeg");
+
+                if (LOCAL_LOG) {
+                    Log.d(TAG, "saveResultPictureNew >>> TITLE = " + title);
+                    Log.d(TAG, "saveResultPictureNew >>> DISPLAY_NAME = " + file.getName());
+                }
 
 				if (enableExifTagOrientation)
 				{
@@ -936,9 +954,11 @@ public class SavingService extends NotificationService
 					bufFile.delete();
 				}
 
-				Uri uri = getApplicationContext().getContentResolver()
-						.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
-				broadcastNewPicture(uri);
+                ContentResolver cr = getApplicationContext().getContentResolver();
+                Uri uri = cr.insert(Images.Media.EXTERNAL_CONTENT_URI, values);
+                MpiMediaStore.addImage(cr, uri.getLastPathSegment(), values.getAsString(ImageColumns.DATA),
+                        values.getAsString(ImageColumns.TITLE), MainScreen.instance.getBucketName());//mpi
+                broadcastNewPicture(uri);
 			}
 
 			ApplicationScreen.getMessageHandler().sendEmptyMessage(ApplicationInterface.MSG_EXPORT_FINISHED);
@@ -1631,7 +1651,18 @@ public class SavingService extends NotificationService
 	// toInternalMemory - should be true only if force save to internal
 	public static File getSaveDir(boolean forceSaveToInternalMemory)
 	{
-		File dcimDir, saveDir = null, memcardDir;
+        String uri = saveToPath;
+        File saveDir;
+        try {
+            saveDir = new File(saveToPath);
+            if (!saveDir.exists()) saveDir.mkdirs();
+        } catch (Exception e) {
+            e.printStackTrace();
+            saveDir = null;
+        }
+        return saveDir;
+
+/*		File dcimDir, saveDir = null, memcardDir;
 		boolean usePhoneMem = true;
 
 		String abcDir = "Camera";
@@ -1697,7 +1728,7 @@ public class SavingService extends NotificationService
 			if (!saveDir.exists())
 				saveDir.mkdirs();
 		}
-		return saveDir;
+		return saveDir;*/
 	}
 
 	// get file saving directory
@@ -1705,7 +1736,19 @@ public class SavingService extends NotificationService
 	@TargetApi(19)
 	public static DocumentFile getSaveDirNew(boolean forceSaveToInternalMemory)
 	{
-		DocumentFile saveDir = null;
+        DocumentFile saveDir = null;
+        String uri = saveToPath;
+        try {
+            File dirFile = new File(uri);
+            if (!dirFile.exists()) dirFile.mkdirs();
+            saveDir = DocumentFile.fromFile(dirFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            saveDir = null;
+        }
+        return saveDir;
+
+/*		DocumentFile saveDir = null;
 		boolean usePhoneMem = true;
 
 		String abcDir = "Camera";
@@ -1764,12 +1807,24 @@ public class SavingService extends NotificationService
 			saveDir = abcFolder;
 		}
 
-		return saveDir;
+		return saveDir;*/
 	}
 
-	public static String getExportFileName(String modeName)
+    public static String genFileName() {
+        Calendar d = Calendar.getInstance();
+        String fileFormat = "";
+
+        //if using separator in file name
+        fileFormat = String.format("%04d%02d%02d%02d%02d%02d%05.0f", d.get(Calendar.YEAR), d.get(Calendar.MONTH) + 1,
+                d.get(Calendar.DAY_OF_MONTH), d.get(Calendar.HOUR_OF_DAY), d.get(Calendar.MINUTE),
+                d.get(Calendar.SECOND), Math.random()*1e5);
+        return fileFormat;
+    }
+
+    public static String getExportFileName(String modeName)
 	{
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
+        return genFileName();
+/*		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
 		saveOption = Integer.parseInt(prefs.getString(ApplicationScreen.sExportNamePref, "2"));
 		saveOptionSeparator = prefs.getBoolean(ApplicationScreen.sExportNameSeparatorPref, false);
 
@@ -1815,7 +1870,7 @@ public class SavingService extends NotificationService
 			break;
 		}
 
-		return fileFormat;
+		return fileFormat;*/
 	}
 
 	public void copyFromForceFileName(File dst) throws IOException

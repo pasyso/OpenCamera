@@ -1251,24 +1251,24 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 		});
 
 		// <!-- -+-
-		RotateImageView unlock = ((RotateImageView) guiView.findViewById(R.id.Unlock));
-		unlock.setOnClickListener(new OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				if (guiView.findViewById(R.id.postprocessingLayout).getVisibility() == View.VISIBLE)
-					return;
-
-				if (MainScreen.titleUnlockAll == null || MainScreen.titleUnlockAll.endsWith("check for sale"))
-				{
-					Toast.makeText(MainScreen.getMainContext(),
-							"Error connecting to Google Play. Check internet connection.", Toast.LENGTH_LONG).show();
-					return;
-				}
-				// start store
-				showStore();
-			}
-		});
+//		RotateImageView unlock = ((RotateImageView) guiView.findViewById(R.id.Unlock));
+//		unlock.setOnClickListener(new OnClickListener()
+//		{
+//			public void onClick(View v)
+//			{
+//				if (guiView.findViewById(R.id.postprocessingLayout).getVisibility() == View.VISIBLE)
+//					return;
+//
+//				if (MainScreen.titleUnlockAll == null || MainScreen.titleUnlockAll.endsWith("check for sale"))
+//				{
+//					Toast.makeText(MainScreen.getMainContext(),
+//							"Error connecting to Google Play. Check internet connection.", Toast.LENGTH_LONG).show();
+//					return;
+//				}
+//				// start store
+//				showStore();
+//			}
+//		});
 		// -+- -->
 	}
 
@@ -1365,7 +1365,7 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 					manualControlsLayout.setRotation(AlmalenceGUI.mDeviceOrientation);
 				}
 
-				store.setOrientation();
+//				store.setOrientation();
 				
 				AlmalenceGUI.mPreviousDeviceOrientation = AlmalenceGUI.mDeviceOrientation;
 
@@ -1423,8 +1423,8 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 		if (settingsControlsVisible)
 			((Panel) guiView.findViewById(R.id.topPanel)).setOpen(false, true);
 
-		if (((RelativeLayout) guiView.findViewById(R.id.viewPagerLayoutMain)).getVisibility() == View.VISIBLE)
-			hideStore();
+//		if (((RelativeLayout) guiView.findViewById(R.id.viewPagerLayoutMain)).getVisibility() == View.VISIBLE)
+//			hideStore();
 
 		lockControls = false;
 		guiView.findViewById(R.id.buttonGallery).setEnabled(true);
@@ -1452,13 +1452,13 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 	@Override
 	public void showStore()
 	{
-		store.showStore();
+//		store.showStore();
 	}
 
 	@Override
 	public void hideStore()
 	{
-		store.hideStore();
+//		store.hideStore();
 	}
 
 	@Override
@@ -1475,8 +1475,8 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 
 	private void initShutterButton()
 	{
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
-		boolean switchShutterOn = prefs.getBoolean(MainScreen.sFastSwitchShutterOn, true);
+//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
+		boolean switchShutterOn = MainScreen.isVideoEnabled();//prefs.getBoolean(MainScreen.sFastSwitchShutterOn, true);
 		String modeID = ApplicationScreen.getPluginManager().getActiveModeID();
 
 		if (switchShutterOn)
@@ -1557,7 +1557,7 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 			guiView.findViewById(R.id.hintLayout).setVisibility(View.VISIBLE);
 
 		// <!-- -+-
-		manageUnlockControl();
+//		manageUnlockControl();
 		// -+- -->
 
 		// Create select mode button with appropriate icon
@@ -1666,10 +1666,10 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 		imageSizeQuickSetting = new ImageSizeQuickSetting(MainScreen.getInstance());
 		collorEffectQuickSetting = new ColorEffectQuickSetting(MainScreen.getInstance());
 
-		store = new AlmalenceStore(guiView);
-		// <!-- -+-
-		manageUnlockControl();
-		// -+- -->
+//		store = new AlmalenceStore(guiView);
+//		// <!-- -+-
+//		manageUnlockControl();
+//		// -+- -->
 
 		// Sony remote camera
 		sonyCameraDeviceExplorer = new SonyCameraDeviceExplorer(guiView);
@@ -1677,17 +1677,17 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 	}
 
 	// <!-- -+-
-	private void manageUnlockControl()
-	{
-		// manage unlock control
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
-		if (prefs.getBoolean("unlock_all_forever", false))
-			store.HideUnlockControl();
-		else
-		{
-			store.ShowUnlockControl();
-		}
-	}
+//	private void manageUnlockControl()
+//	{
+//		// manage unlock control
+//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
+//		if (prefs.getBoolean("unlock_all_forever", false))
+//			store.HideUnlockControl();
+//		else
+//		{
+//			store.ShowUnlockControl();
+//		}
+//	}
 
 	// -+- -->
 
@@ -1784,7 +1784,8 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 		}
 		// Recreate plugin views
 		removePluginViews();
-		createPluginViews();
+//		TODO: test createPluginViews
+//		createPluginViews();
 
 		// add self-timer control
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
@@ -6861,8 +6862,8 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 		}
 
 		// <!-- -+-
-		if (!MainScreen.checkLaunches(tmpActiveMode))
-			return false;
+//		if (!MainScreen.checkLaunches(tmpActiveMode))
+//			return false;
 		// -+- -->
 
 		new CountDownTimer(100, 100)
@@ -8052,11 +8053,11 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 				quickControlsVisible = false;
 			}
 
-			if (((RelativeLayout) guiView.findViewById(R.id.viewPagerLayoutMain)).getVisibility() == View.VISIBLE)
-			{
-				hideStore();
-				res++;
-			}
+//			if (((RelativeLayout) guiView.findViewById(R.id.viewPagerLayoutMain)).getVisibility() == View.VISIBLE)
+//			{
+//				hideStore();
+//				res++;
+//			}
 		}
 
 		if (keyCode == KeyEvent.KEYCODE_CAMERA /*
@@ -8089,84 +8090,111 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 		return res > 0 ? true : false;
 	}
 
-	public void openGallery(boolean isOpenExternal)
-	{
+//	public void openGallery(boolean isOpenExternal)
+//	{
+//		if (mThumbnail == null)
+//			return;
+//
+//		Uri uri = this.mThumbnail.getUri();
+//
+//		ApplicationScreen.getPluginManager().sendMessage(ApplicationInterface.MSG_BROADCAST,
+//				ApplicationInterface.MSG_STOP_CAPTURE);
+//
+//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
+//		boolean isAllowedExternal = prefs.getBoolean(
+//				ApplicationScreen.getAppResources().getString(R.string.Preference_allowExternalGalleries), false);
+//		if (isAllowedExternal || isOpenExternal)
+//		{
+//			openExternalGallery(uri);
+//		} else
+//		{
+//			// if installed - run ABC Editor
+//			if (AppEditorNotifier.isABCEditorInstalled(ApplicationScreen.instance))
+//			{
+//				Intent intent = new Intent("com.almalence.opencameditor.action.REVIEW", uri);
+//				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//				ApplicationScreen.instance.startActivity(intent);// com.almalence.opencameditor
+//			}
+//			// if not installed - show that we have editor and let user install
+//			// it of run standard dialog
+//			else
+//			{
+//				// if not - show default gallery
+//				if (!AppEditorNotifier.showEditorNotifierDialogIfNeeded(ApplicationScreen.instance))
+//					openExternalGallery(uri);
+//			}
+//		}
+//	}
+
+	public void openGallery(boolean isOpenExternal) {//mpi
 		if (mThumbnail == null)
 			return;
 
-		Uri uri = this.mThumbnail.getUri();
+//		Uri uri = this.mThumbnail.getUri();
+		Uri uri = ApplicationScreen.instance.getMainUri();
 
 		ApplicationScreen.getPluginManager().sendMessage(ApplicationInterface.MSG_BROADCAST,
 				ApplicationInterface.MSG_STOP_CAPTURE);
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ApplicationScreen.getMainContext());
-		boolean isAllowedExternal = prefs.getBoolean(
-				ApplicationScreen.getAppResources().getString(R.string.Preference_allowExternalGalleries), false);
-		if (isAllowedExternal || isOpenExternal)
-		{
-			openExternalGallery(uri);
-		} else
-		{
-			// if installed - run ABC Editor
-			if (AppEditorNotifier.isABCEditorInstalled(ApplicationScreen.instance))
-			{
-				Intent intent = new Intent("com.almalence.opencameditor.action.REVIEW", uri);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				ApplicationScreen.instance.startActivity(intent);// com.almalence.opencameditor
-			}
-			// if not installed - show that we have editor and let user install
-			// it of run standard dialog
-			else
-			{
-				// if not - show default gallery
-				if (!AppEditorNotifier.showEditorNotifierDialogIfNeeded(ApplicationScreen.instance))
-					openExternalGallery(uri);
-			}
-		}
-	}
+//		ApplicationScreen.instance.startActivity(new Intent(ApplicationScreen.instance, ImageGridActivity.class)
+//				.putExtra(ImageGridActivity.EXTRA_URI, uri)
+//				.putExtra(ImageGridActivity.EXTRA_IMAGE_DELETE_ENABLED, true));
 
-	private void openExternalGallery(Uri uri)
-	{
-		try
-		{
-			Intent intent = new Intent("com.android.camera.action.REVIEW", uri);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		Intent intent = new Intent("com.untwinedsolutions.mpicamera.action.IMAGE_GRID")
+					/*new Intent(ApplicationScreen.instance, c)*/
+				.putExtra("extra:Uri", uri)
+				.putExtra("extra:deleteEnabled", true);
+		if (intent.resolveActivity(ApplicationScreen.instance.getPackageManager()) != null) {
 			ApplicationScreen.instance.startActivity(intent);
-		} catch (ActivityNotFoundException ex)
-		{
-			try
-			{
-				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				ApplicationScreen.instance.startActivity(intent);
-			} catch (ActivityNotFoundException e)
-			{
-				Log.e("AlmalenceGUI", "review image fail. uri=" + uri, e);
-			}
-		}
-	}
-
-	public static boolean isUriValid(Uri uri, ContentResolver resolver)
-	{
-		if (uri == null)
-			return false;
-
-		try
-		{
-			ParcelFileDescriptor pfd = resolver.openFileDescriptor(uri, "r");
-			if (pfd == null)
-			{
-				Log.e("AlmalenceGUI", "Fail to open URI. URI=" + uri);
-				return false;
-			}
-			pfd.close();
-		} catch (IOException ex)
-		{
-			return false;
+		} else {
+			Toast.makeText(ApplicationScreen.instance, "Gallery not installed", Toast.LENGTH_LONG).show();
 		}
 
-		return true;
+
 	}
+
+//	private void openExternalGallery(Uri uri)
+//	{
+//		try
+//		{
+//			Intent intent = new Intent("com.android.camera.action.REVIEW", uri);
+//			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//			ApplicationScreen.instance.startActivity(intent);
+//		} catch (ActivityNotFoundException ex)
+//		{
+//			try
+//			{
+//				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//				intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//				ApplicationScreen.instance.startActivity(intent);
+//			} catch (ActivityNotFoundException e)
+//			{
+//				Log.e("AlmalenceGUI", "review image fail. uri=" + uri, e);
+//			}
+//		}
+//	}
+
+//	public static boolean isUriValid(Uri uri, ContentResolver resolver)
+//	{
+//		if (uri == null)
+//			return false;
+//
+//		try
+//		{
+//			ParcelFileDescriptor pfd = resolver.openFileDescriptor(uri, "r");
+//			if (pfd == null)
+//			{
+//				Log.e("AlmalenceGUI", "Fail to open URI. URI=" + uri);
+//				return false;
+//			}
+//			pfd.close();
+//		} catch (IOException ex)
+//		{
+//			return false;
+//		}
+//
+//		return true;
+//	}
 
 	@Override
 	public void onCaptureFinished()

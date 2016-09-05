@@ -93,6 +93,7 @@ import com.almalence.sony.cameraremote.SimpleStreamSurfaceView;
 import com.almalence.sony.cameraremote.utils.NFCHandler;
 import com.almalence.sony.cameraremote.utils.WifiHandler;
 import com.almalence.util.AppWidgetNotifier;
+import com.almalence.util.Permissions;
 import com.almalence.util.Util;
 
 //<!-- -+-
@@ -367,16 +368,16 @@ public class MainScreen extends ApplicationScreen
 			superPurchased = prefs.getBoolean("plugin_almalence_super", false);
 		}
 
-		if (!unlockAllPurchased)
-			createBillingHandler();
+//		if (!unlockAllPurchased)
+//			createBillingHandler();
 
 		/**** Billing *****/
 
 		// application rating helper
-		AppRater.app_launched(this);
+//		AppRater.app_launched(this);mpi
 		// -+- -->
 
-		AppWidgetNotifier.app_launched(this);
+//		AppWidgetNotifier.app_launched(this);mpi
 
 		keepScreenOn = prefs.getBoolean(sKeepScreenOn, false);
 
@@ -396,8 +397,10 @@ public class MainScreen extends ApplicationScreen
 //		guiManager.onCreate();
 
 		// init plugin manager
+//		TODO: check to uncomment
 //		PluginManager.getInstance().onCreate();
 
+/*
 		Intent intent = this.getIntent();
 		goShopping = intent.getBooleanExtra(EXTRA_SHOP, false);
 
@@ -412,7 +415,9 @@ public class MainScreen extends ApplicationScreen
 			}
 			guiManager.showStore();
 		}
+*/
 		// -+- -->
+		Permissions.verifyStoragePermissionsRationale(this);
 	}
 	
 	@Override
@@ -703,7 +708,7 @@ public class MainScreen extends ApplicationScreen
 
 		// <!-- -+-
 		/**** Billing *****/
-		destroyBillingHandler();
+//		destroyBillingHandler();
 		/**** Billing *****/
 		// -+- -->
 
@@ -1621,11 +1626,11 @@ public class MainScreen extends ApplicationScreen
 		}
 
 		// <!-- -+-
-		if (((RelativeLayout) guiManager.getMainView().findViewById(R.id.viewPagerLayoutMain)).getVisibility() == View.VISIBLE)
+/*		if (((RelativeLayout) guiManager.getMainView().findViewById(R.id.viewPagerLayoutMain)).getVisibility() == View.VISIBLE)
 		{
 			guiManager.hideStore();
 			return true;
-		}
+		}*/
 		// -+- -->
 
 		if (PluginManager.getInstance().onKeyDown(true, keyCode, event))
@@ -1634,6 +1639,7 @@ public class MainScreen extends ApplicationScreen
 			return true;
 
 		// <!-- -+-
+/*
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 		{
 			if (AppRater.showRateDialogIfNeeded(this))
@@ -1645,6 +1651,7 @@ public class MainScreen extends ApplicationScreen
 				return true;
 			}
 		}
+*/
 		// -+- -->
 
 		return false;
@@ -1933,129 +1940,129 @@ public class MainScreen extends ApplicationScreen
 	private static long		timeLastSubscriptionCheck	= 0;// should check each 32 days - 32*24*60*60*1000
 	private long			days32						= 32 * 24 * 60 * 60 * 1000L;
 
-	private void createBillingHandler()
-	{
-		try
-		{
-			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainScreen.getMainContext());
-
-			timeLastSubscriptionCheck = prefs.getLong("timeLastSubscriptionCheck", 0);
-			if ((System.currentTimeMillis() - timeLastSubscriptionCheck) > days32)
-				subscriptionStatusRequest = true;
-			else
-				subscriptionStatusRequest = false;
-
-			if ((isInstalled("com.almalence.hdr_plus")) || (isInstalled("com.almalence.pixfix")))
-			{
-				hdrPurchased = true;
-				Editor prefsEditor = prefs.edit();
-				prefsEditor.putBoolean("plugin_almalence_hdr", true).commit();
-			}
-			if (isInstalled("com.almalence.panorama.smoothpanorama"))
-			{
-				panoramaPurchased = true;
-				Editor prefsEditor = prefs.edit();
-				prefsEditor.putBoolean("plugin_almalence_panorama", true).commit();
-			}
-			
-			
-			//>>>Yandex patch!!!
+//	private void createBillingHandler()
+//	{
+//		try
+//		{
+//			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainScreen.getMainContext());
+//
+//			timeLastSubscriptionCheck = prefs.getLong("timeLastSubscriptionCheck", 0);
+//			if ((System.currentTimeMillis() - timeLastSubscriptionCheck) > days32)
+//				subscriptionStatusRequest = true;
+//			else
+//				subscriptionStatusRequest = false;
+//
+//			if ((isInstalled("com.almalence.hdr_plus")) || (isInstalled("com.almalence.pixfix")))
 //			{
 //				hdrPurchased = true;
-//				multishotsPurchased = true;
 //				Editor prefsEditor = prefs.edit();
 //				prefsEditor.putBoolean("plugin_almalence_hdr", true).commit();
-//				prefsEditor.putBoolean("plugin_almalence_moving_burst", true).commit();
 //			}
-			//<<<Yandex patch!!!
-			
-
-			String base64EncodedPublicKeyGoogle = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnztuXLNughHjGW55Zlgicr9r5bFP/K5DBc3jYhnOOo1GKX8M2grd7+SWeUHWwQk9lgQKat/ITESoNPE7ma0ZS1Qb/VfoY87uj9PhsRdkq3fg+31Q/tv5jUibSFrJqTf3Vmk1l/5K0ljnzX4bXI0p1gUoGd/DbQ0RJ3p4Dihl1p9pJWgfI9zUzYfvk2H+OQYe5GAKBYQuLORrVBbrF/iunmPkOFN8OcNjrTpLwWWAcxV5k0l5zFPrPVtkMZzKavTVWZhmzKNhCvs1d8NRwMM7XMejzDpI9A7T9egl6FAN4rRNWqlcZuGIMVizJJhvOfpCLtY971kQkYNXyilD40fefwIDAQAB";
-			String base64EncodedPublicKeyYandex = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6KzaraKmv48Y+Oay2ZpWu4BHtSKYZidyCxbaYZmmOH4zlRNic/PDze7OA4a1buwdrBg3AAHwfVbHFzd9o91yinnHIWYQqyPg7L1Swh5W70xguL4jlF2N/xI9VoL4vMRv3Bf/79VfQ11utcPLHEXPR8nPEp9PT0wN2Hqp4yCWFbfvhVVmy7sQjywnfLqcWTcFCT6N/Xdxs1quq0hTE345MiCgkbh1xVULmkmZrL0rWDVCaxfK4iZWSRgQJUywJ6GMtUh+FU6/7nXDenC/vPHqnDR0R6BRi+QsES0ZnEfQLqNJoL+rqJDr/sDIlBQQDMQDxVOx0rBihy/FlHY34UF+bwIDAQAB";
-			// Create the helper, passing it our context and the public key to
-			// verify signatures with
-			Map<String, String> storeKeys = new HashMap<String, String>();
-			storeKeys.put(OpenIabHelper.NAME_GOOGLE, base64EncodedPublicKeyGoogle);
-			storeKeys.put("com.yandex.store", base64EncodedPublicKeyYandex);
-
-			OpenIabHelper.Options.Builder builder = new OpenIabHelper.Options.Builder()
-					.setStoreSearchStrategy(OpenIabHelper.Options.SEARCH_STRATEGY_INSTALLER_THEN_BEST_FIT)
-					.setVerifyMode(OpenIabHelper.Options.VERIFY_EVERYTHING).addStoreKeys(storeKeys);
-
-			mHelper = new OpenIabHelper(this, builder.build());
-
-			OpenIabHelper.enableDebugLogging(true);
-
-			mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
-			{
-				public void onIabSetupFinished(IabResult result)
-				{
-					try
-					{
-						Log.v("Main billing", "Setup finished.");
-
-						if (!result.isSuccess())
-						{
-							Log.v("Main billing", "Problem setting up in-app billing: " + result);
-							return;
-						}
-
-						List<String> additionalSkuList = new ArrayList<String>();
-						additionalSkuList.add(SKU_SUPER);
-						additionalSkuList.add(SKU_HDR);
-						additionalSkuList.add(SKU_PANORAMA);
-						additionalSkuList.add(SKU_UNLOCK_ALL);
-						additionalSkuList.add(SKU_UNLOCK_ALL_COUPON);
-						additionalSkuList.add(SKU_MOVING_SEQ);
-						additionalSkuList.add(SKU_GROUPSHOT);
-						additionalSkuList.add(SKU_SUBSCRIPTION_YEAR_CTRL);
-						additionalSkuList.add(SKU_PROMO);
-
-						if (subscriptionStatusRequest)
-						{
-							// subscription year
-							additionalSkuList.add(SKU_SUBSCRIPTION_YEAR);
-							additionalSkuList.add(SKU_SUBSCRIPTION_YEAR_NEW);
-							// reset subscription status
-							unlockAllSubscriptionYear = false;
-							prefs.edit().putBoolean("subscription_unlock_all_year", false).commit();
-
-							timeLastSubscriptionCheck = System.currentTimeMillis();
-							prefs.edit().putLong("timeLastSubscriptionCheck", timeLastSubscriptionCheck).commit();
-						}
-
-						// for sale
-						additionalSkuList.add(SKU_SALE1);
-						additionalSkuList.add(SKU_SALE2);
-
-						mHelper.queryInventoryAsync(true, additionalSkuList, mGotInventoryListener);
-					} catch (Exception e)
-					{
-						e.printStackTrace();
-						Log.e("Main billing", "onIabSetupFinished exception: " + e.getMessage());
-					}
-				}
-			});
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			Log.e("Main billing", "createBillingHandler exception: " + e.getMessage());
-		}
-	}
-
-	private void destroyBillingHandler()
-	{
-		try
-		{
-			if (mHelper != null)
-				mHelper.dispose();
-			mHelper = null;
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			Log.e("Main billing", "destroyBillingHandler exception: " + e.getMessage());
-		}
-	}
+//			if (isInstalled("com.almalence.panorama.smoothpanorama"))
+//			{
+//				panoramaPurchased = true;
+//				Editor prefsEditor = prefs.edit();
+//				prefsEditor.putBoolean("plugin_almalence_panorama", true).commit();
+//			}
+//
+//
+//			//>>>Yandex patch!!!
+////			{
+////				hdrPurchased = true;
+////				multishotsPurchased = true;
+////				Editor prefsEditor = prefs.edit();
+////				prefsEditor.putBoolean("plugin_almalence_hdr", true).commit();
+////				prefsEditor.putBoolean("plugin_almalence_moving_burst", true).commit();
+////			}
+//			//<<<Yandex patch!!!
+//
+//
+//			String base64EncodedPublicKeyGoogle = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnztuXLNughHjGW55Zlgicr9r5bFP/K5DBc3jYhnOOo1GKX8M2grd7+SWeUHWwQk9lgQKat/ITESoNPE7ma0ZS1Qb/VfoY87uj9PhsRdkq3fg+31Q/tv5jUibSFrJqTf3Vmk1l/5K0ljnzX4bXI0p1gUoGd/DbQ0RJ3p4Dihl1p9pJWgfI9zUzYfvk2H+OQYe5GAKBYQuLORrVBbrF/iunmPkOFN8OcNjrTpLwWWAcxV5k0l5zFPrPVtkMZzKavTVWZhmzKNhCvs1d8NRwMM7XMejzDpI9A7T9egl6FAN4rRNWqlcZuGIMVizJJhvOfpCLtY971kQkYNXyilD40fefwIDAQAB";
+//			String base64EncodedPublicKeyYandex = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6KzaraKmv48Y+Oay2ZpWu4BHtSKYZidyCxbaYZmmOH4zlRNic/PDze7OA4a1buwdrBg3AAHwfVbHFzd9o91yinnHIWYQqyPg7L1Swh5W70xguL4jlF2N/xI9VoL4vMRv3Bf/79VfQ11utcPLHEXPR8nPEp9PT0wN2Hqp4yCWFbfvhVVmy7sQjywnfLqcWTcFCT6N/Xdxs1quq0hTE345MiCgkbh1xVULmkmZrL0rWDVCaxfK4iZWSRgQJUywJ6GMtUh+FU6/7nXDenC/vPHqnDR0R6BRi+QsES0ZnEfQLqNJoL+rqJDr/sDIlBQQDMQDxVOx0rBihy/FlHY34UF+bwIDAQAB";
+//			// Create the helper, passing it our context and the public key to
+//			// verify signatures with
+//			Map<String, String> storeKeys = new HashMap<String, String>();
+//			storeKeys.put(OpenIabHelper.NAME_GOOGLE, base64EncodedPublicKeyGoogle);
+//			storeKeys.put("com.yandex.store", base64EncodedPublicKeyYandex);
+//
+//			OpenIabHelper.Options.Builder builder = new OpenIabHelper.Options.Builder()
+//					.setStoreSearchStrategy(OpenIabHelper.Options.SEARCH_STRATEGY_INSTALLER_THEN_BEST_FIT)
+//					.setVerifyMode(OpenIabHelper.Options.VERIFY_EVERYTHING).addStoreKeys(storeKeys);
+//
+//			mHelper = new OpenIabHelper(this, builder.build());
+//
+//			OpenIabHelper.enableDebugLogging(true);
+//
+//			mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
+//			{
+//				public void onIabSetupFinished(IabResult result)
+//				{
+//					try
+//					{
+//						Log.v("Main billing", "Setup finished.");
+//
+//						if (!result.isSuccess())
+//						{
+//							Log.v("Main billing", "Problem setting up in-app billing: " + result);
+//							return;
+//						}
+//
+//						List<String> additionalSkuList = new ArrayList<String>();
+//						additionalSkuList.add(SKU_SUPER);
+//						additionalSkuList.add(SKU_HDR);
+//						additionalSkuList.add(SKU_PANORAMA);
+//						additionalSkuList.add(SKU_UNLOCK_ALL);
+//						additionalSkuList.add(SKU_UNLOCK_ALL_COUPON);
+//						additionalSkuList.add(SKU_MOVING_SEQ);
+//						additionalSkuList.add(SKU_GROUPSHOT);
+//						additionalSkuList.add(SKU_SUBSCRIPTION_YEAR_CTRL);
+//						additionalSkuList.add(SKU_PROMO);
+//
+//						if (subscriptionStatusRequest)
+//						{
+//							// subscription year
+//							additionalSkuList.add(SKU_SUBSCRIPTION_YEAR);
+//							additionalSkuList.add(SKU_SUBSCRIPTION_YEAR_NEW);
+//							// reset subscription status
+//							unlockAllSubscriptionYear = false;
+//							prefs.edit().putBoolean("subscription_unlock_all_year", false).commit();
+//
+//							timeLastSubscriptionCheck = System.currentTimeMillis();
+//							prefs.edit().putLong("timeLastSubscriptionCheck", timeLastSubscriptionCheck).commit();
+//						}
+//
+//						// for sale
+//						additionalSkuList.add(SKU_SALE1);
+//						additionalSkuList.add(SKU_SALE2);
+//
+//						mHelper.queryInventoryAsync(true, additionalSkuList, mGotInventoryListener);
+//					} catch (Exception e)
+//					{
+//						e.printStackTrace();
+//						Log.e("Main billing", "onIabSetupFinished exception: " + e.getMessage());
+//					}
+//				}
+//			});
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//			Log.e("Main billing", "createBillingHandler exception: " + e.getMessage());
+//		}
+//	}
+//
+//	private void destroyBillingHandler()
+//	{
+//		try
+//		{
+//			if (mHelper != null)
+//				mHelper.dispose();
+//			mHelper = null;
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//			Log.e("Main billing", "destroyBillingHandler exception: " + e.getMessage());
+//		}
+//	}
 
 	public static String						titleUnlockAll				= "$6.95";
 	public static String						titleUnlockAllCoupon		= "$3.95";

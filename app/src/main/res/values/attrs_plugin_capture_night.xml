@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<attr name="switchStyle" format="reference" />
-    <declare-styleable name="Switch">
-        <attr name="thumb" format="reference"/>
-        <attr name="track" format="reference" />
-        <attr name="textOn" format="string"/>
-        <attr name="textOff" format="string"/>
-        <attr name="thumbTextPadding" format="dimension" />
-        <attr name="switchTextAppearance" format="reference" />
-        <attr name="switchMinWidth" format="dimension" />
-        <attr name="switchMinHeight" format="dimension" />
-        <attr name="switchPadding" format="dimension" />
+	<attr name="ocSwitchStyle" format="reference" />
+    <declare-styleable name="OcSwitch">
+        <attr name="ocThumb" format="reference"/>
+        <attr name="ocTrack" format="reference" />
+        <attr name="ocTextOn" format="string"/>
+        <attr name="ocTextOff" format="string"/>
+        <attr name="ocThumbTextPadding" format="dimension" />
+        <attr name="ocSwitchTextAppearance" format="reference" />
+        <attr name="ocSwitchMinWidth" format="dimension" />
+        <attr name="ocSwitchMinHeight" format="dimension" />
+        <attr name="ocSwitchPadding" format="dimension" />
 	</declare-styleable>
 	
-    <attr name="textAppearance" format="reference" />
-  <declare-styleable name="TextAppearanceSwitch" >
-      	<attr name="textColor" format="color" /> 
+    <attr name="ocTextAppearance" format="reference" />
+  <declare-styleable name="OcTextAppearanceSwitch" >
+      	<attr name="textColor" format="color" />
         <attr name="textSize" format="dimension"/>
         <attr name="textStyle" format="reference"/>
         <attr name="typeface" format="reference"/>

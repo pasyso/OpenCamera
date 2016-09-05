@@ -42,7 +42,8 @@
 		
 		<PreferenceScreen
 			 android:fragment="com.almalence.opencam.Fragment"
-			 android:title="@string/Pref_Video_Title">
+			 android:title="@string/Pref_Video_Title"
+			 android:key="video">
 			 <extra android:name="type" android:value="video"/>
 		</PreferenceScreen>
 		

@@ -555,6 +555,7 @@ public class PluginManager extends PluginManagerBase
 		} else if ("shooting_settings".equals(settings))
 		{
 			pf.addPreferencesFromResource(R.xml.preferences_modes);
+			if (!MainScreen.isVideoEnabled()) pf.getPreferenceScreen().removePreference(pf.findPreference("video"));
 		} else if ("capture_expobracketing_more".equals(settings))
 		{
 			pf.addPreferencesFromResource(R.xml.preferences_capture_expobracketing_more);

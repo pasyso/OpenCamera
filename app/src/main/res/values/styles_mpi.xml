@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="OcBaseAppLogoText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:typeface">normal</item>
+    </style>
+
+    <style name="OcAppLogoText" parent="OcBaseAppLogoText"></style>
+
+    <style name="OcBaseAppLogoText.Cap">
+        <item name="android:textSize">30sp</item>
+        <item name="android:paddingLeft">2dp</item>
+    </style>
+
+    <style name="OcAppLogoText.Cap" parent="OcBaseAppLogoText.Cap"></style>
+    <style name="OcAppLogoText.Tiny">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="OcAppLogoText.Cap.Tiny">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+</resources>

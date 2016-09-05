@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppThemeDark" parent="@android:style/Theme.DeviceDefault">
-		<item name="switchStyle">@style/switch_dark</item>
-		<item name="textAppearance">@style/TextAppearance</item>
+		<item name="ocSwitchStyle">@style/OcSwitch_dark</item>
+		<item name="ocTextAppearance">@style/OcTextAppearance</item>
 		<item name="android:seekBarStyle">@style/AlmalenceOpenCameraThemeSeekBar</item>
 	</style>
 
     <style name="AppThemeLight" parent="@android:style/Theme.DeviceDefault.Light">
-		<item name="switchStyle">@style/switch_light</item>
-		<item name="textAppearance">@style/TextAppearance</item>
+		<item name="ocSwitchStyle">@style/OcSwitch_light</item>
+		<item name="ocTextAppearance">@style/OcTextAppearance</item>
 		<item name="android:seekBarStyle">@style/AlmalenceOpenCameraThemeSeekBar</item>
 	</style>
 	

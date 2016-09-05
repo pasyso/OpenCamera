@@ -47,6 +47,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract.Document;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsProvider;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.provider.MediaStore.Video;
@@ -58,10 +59,15 @@ import android.util.Log;
  import com.almalence.opencam_plus.PluginManagerBase;
  +++ --> */
 //<!-- -+-
+import com.almalence.opencam.MainScreen;
 import com.almalence.opencam.PluginManagerBase;
 //-+- -->
 
 import com.almalence.util.Util;
+import com.untwinedsolutions.base.BaseApplication;
+import com.untwinedsolutions.base.provider.contentprovider.MpiMediaStore;
+import com.untwinedsolutions.base.util.FileUtil;
+import com.untwinedsolutions.base.util.image.ImageFetcher;
 
 public class Thumbnail
 {
@@ -231,8 +237,40 @@ public class Thumbnail
 		return thumbnail;
 	}
 
+	private static Thumbnail getRemoteThumbnail(ContentResolver resolver) {
+		if (MainScreen.instance.getMainUri() == null) return null;
+		MpiMediaStore.RemoteThumbnail remoteThumbnail = MpiMediaStore.getRemoteThumbnail(resolver, MainScreen.instance.getMainUri());
+		if (remoteThumbnail != null) {
+			Log.d(TAG, "getLastThumbnail >>> remoteThumbnail >>> downloading thumbnail");
+			File thumbDir = FileUtil.getCacheDir(BaseApplication.getBaseApplication().getApplicationContext(), "opencameraThumbnails");
+			if (!thumbDir.exists()) thumbDir.mkdirs();
+			File thumbFile = new File(thumbDir, remoteThumbnail.getTitle());
+			try {
+				if (!thumbFile.exists()) {
+					//clear cache directory
+					FileUtil.deleteOldFiles(thumbDir, 5);// 5 - max cached files in dir
+					thumbFile.createNewFile();
+
+					if (!ImageFetcher.downloadUrlToStream(remoteThumbnail.getPath(),
+							new FileOutputStream(thumbFile, false))) {
+						if (thumbFile.exists()) thumbFile.delete();
+					}
+				}
+				if (thumbFile.exists()) {
+					Bitmap bitmap = BitmapFactory.decodeFile(thumbFile.getPath());
+					return createThumbnail(remoteThumbnail.getUri(), bitmap, null, 0);
+				}
+			} catch (IOException e) {
+				Log.e(TAG, "getLastThumbnail >>> remoteThumbnail >>> IOException : " + e.getMessage());
+			}
+		}
+
+		return null;
+	}
+
 	public static Thumbnail getLastThumbnail(ContentResolver resolver)
 	{
+		if (MainScreen.instance.getMainUri() != null) return getRemoteThumbnail(resolver);
 		mResolver = resolver;
 		Media image = getLastImageThumbnail(resolver);
 		Media video = getLastVideoThumbnail(resolver);
@@ -329,10 +367,10 @@ public class Thumbnail
 			DocumentFile saveDir = PluginManagerBase.getSaveDirNew(false);
 			if(saveDir != null)
 			{
-				if (!saveDir.canWrite())
+/*				if (!saveDir.canWrite())
 				{
 					saveDir = PluginManagerBase.getSaveDirNew(true);
-				}
+				}*/
 	
 				// Try to build max deep file path
 //				DocumentFile parentFile = saveDir.getParentFile();
@@ -388,7 +426,6 @@ public class Thumbnail
 		Media externalMedia = null;
 
 		String name = getName();
-		
 		try
 		{
 			Uri baseUri = Images.Media.INTERNAL_CONTENT_URI;
@@ -398,6 +435,7 @@ public class Thumbnail
 
 			String selection = ImageColumns.DATA + " like '%" + name + "%' AND " + ImageColumns.MIME_TYPE
 					+ "='image/jpeg'";
+//			selection += " AND " + ImageColumns.DATA + " not like '%" + name + "/%/%'";
 			String order = ImageColumns.DATE_TAKEN + " DESC," + ImageColumns._ID + " DESC";
 
 			Cursor cursor = null;
@@ -431,6 +469,7 @@ public class Thumbnail
 
 			String selection = ImageColumns.DATA + " like '%" + name + "%' AND " + ImageColumns.MIME_TYPE
 					+ "='image/jpeg'";
+//			selection += " AND " + ImageColumns.DATA + " not like '%" + name + "/%/%'";
 			String order = ImageColumns.DATE_TAKEN + " DESC," + ImageColumns._ID + " DESC";
 
 			Cursor cursor = null;
@@ -511,6 +550,7 @@ public class Thumbnail
 
 			String selection = VideoColumns.DATA + " like '%" + name + "%' AND " + VideoColumns.MIME_TYPE
 					+ "='video/mp4'";
+//			selection += " AND " + VideoColumns.DATA + " not like '%" + name + "/%/%'";
 			String order = VideoColumns.DATE_TAKEN + " DESC," + VideoColumns._ID + " DESC";
 
 			Cursor cursor = null;
@@ -543,6 +583,7 @@ public class Thumbnail
 
 			String selection = VideoColumns.DATA + " like '%" + name + "%' AND " + VideoColumns.MIME_TYPE
 					+ "='video/mp4'";
+			selection += " AND " + VideoColumns.DATA + " not like '%" + name + "/%/%'";
 			String order = VideoColumns.DATE_TAKEN + " DESC," + VideoColumns._ID + " DESC";
 
 			Cursor cursor = null;

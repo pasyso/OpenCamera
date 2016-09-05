@@ -4,7 +4,18 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
+    }
     defaultConfig {
 //        applicationId "com.almalence.opencam"
         minSdkVersion 16
@@ -58,12 +69,8 @@ dependencies {
     compile files('libs/androidexiv2.jar')
     compile files('libs/openiab-0.9.8.6.jar')
     compile files('libs/zxing-2.1/core.jar')
-//    compile project(':base')
-
-//    compile(project(':mpicamera')) {
-//        exclude module: 'com.android.support:appcompat-v7:23.4.0'
-//        exclude module: ':base'
-//        exclude module: ':themes'
-//    }
+    compile(project(':base')) {
+        exclude module: 'com.android.support:support-v13:23.4.0'
+    }
 
 }

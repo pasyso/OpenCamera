@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mpi_save_result_picture_file_null_error">Write error in directory %1$s: impossible to create file. Write permissions required.</string>
+    <string name="mpi_permissions_external_storage">You need to allow access to photo and media files</string>
+</resources>

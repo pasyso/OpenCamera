@@ -30,7 +30,6 @@ import com.almalence.opencam.R;
 import com.almalence.util.Util;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -118,7 +117,7 @@ public class ShutterSwitch extends View
 	 */
 	public ShutterSwitch(Context context, AttributeSet attrs)
 	{
-		this(context, attrs, R.attr.switchStyle);
+		this(context, attrs, R.attr.ocSwitchStyle);
 	}
 
 	/**
@@ -139,12 +138,12 @@ public class ShutterSwitch extends View
 	{
 		super(context, attrs, defStyle);
 
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Switch, defStyle, 0);
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OcSwitch, defStyle, 0);
 
-		mThumbDrawable = a.getDrawable(R.styleable.Switch_thumb);
-		mTrackDrawable = a.getDrawable(R.styleable.Switch_track);
-		mSwitchMinWidth = a.getDimensionPixelSize(R.styleable.Switch_switchMinWidth, 0);
-		mSwitchMinHeight = a.getDimensionPixelSize(R.styleable.Switch_switchMinHeight, 0);
+		mThumbDrawable = a.getDrawable(R.styleable.OcSwitch_ocThumb);
+		mTrackDrawable = a.getDrawable(R.styleable.OcSwitch_ocTrack);
+		mSwitchMinWidth = a.getDimensionPixelSize(R.styleable.OcSwitch_ocSwitchMinWidth, 0);
+		mSwitchMinHeight = a.getDimensionPixelSize(R.styleable.OcSwitch_ocSwitchMinHeight, 0);
 
 		a.recycle();
 

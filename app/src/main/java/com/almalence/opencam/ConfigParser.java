@@ -43,6 +43,7 @@ import com.almalence.opencam.cameracontroller.CameraController;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Build;
+import android.util.Log;
 import android.util.Xml;
 
 /***
@@ -143,7 +144,11 @@ public class ConfigParser
 			in.close();
 		}
 	}
-
+	private boolean mVideoModeEnabled = true;
+	public void setVideoModeEnabled(boolean flag) {
+		Log.d("CP","setVideoModeEnabled >>> " + flag);
+		mVideoModeEnabled = flag;
+	}
 	private boolean readConfig(XmlPullParser parser) throws XmlPullParserException, IOException
 	{
 		parser.require(XmlPullParser.START_TAG, ns, "config");
@@ -157,6 +162,7 @@ public class ConfigParser
 			if (name.equals("mode"))
 			{
 				Mode tmp = readMode(parser);
+				if (mVideoModeEnabled || !"video".equals(tmp.modeID))
 				modes.add(tmp);
 			} else if (name.equals("defaultmode"))
 			{
