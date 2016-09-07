@@ -270,13 +270,12 @@ public class Thumbnail
 
 	public static Thumbnail getLastThumbnail(ContentResolver resolver)
 	{
-		if (MainScreen.instance.getMainUri() != null) return getRemoteThumbnail(resolver);
 		mResolver = resolver;
 		Media image = getLastImageThumbnail(resolver);
 		Media video = getLastVideoThumbnail(resolver);
 
 		if (image == null && video == null)
-			return null;
+			return getRemoteThumbnail(resolver);
 
 		Bitmap bitmap = null;
 		Media lastMedia = null;
