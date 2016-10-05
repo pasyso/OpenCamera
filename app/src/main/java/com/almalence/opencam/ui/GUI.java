@@ -342,10 +342,11 @@ public abstract class GUI
 	
 	public int getImageDataOrientation()
 	{
-		int sensorOrientation = CameraController.getSensorOrientation(CameraController.isFrontCamera()? 1 : 0);
-		
-		int imageOrientation = (mDeviceOrientation + (sensorOrientation + (CameraController.isFrontCamera()? 180 : 0))%360) % 360;
-		return imageOrientation;
+		return getDisplayOrientation();
+//		int sensorOrientation = CameraController.getSensorOrientation(CameraController.isFrontCamera()? 1 : 0);
+//
+//		int imageOrientation = (mDeviceOrientation + (sensorOrientation + (CameraController.isFrontCamera()? 180 : 0))%360) % 360;
+//		return imageOrientation;
 	} // used to operate with image's data
 	//Universal logic to calculate image data orientation based on camera sensor orientation, device orientation and front\back camera mode
 

@@ -156,7 +156,10 @@
 		    </intent-filter>
 		</receiver>
 		-->
-		 
+		<provider
+			android:name="com.untwinedsolutions.base.provider.contentprovider.MpiProvider"
+			android:authorities="${applicationId}.Provider"
+			android:exported="false" />
  </application>
 
 

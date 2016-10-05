@@ -25,10 +25,10 @@
     </style>    	
    
     <style name="OcTextAppearance">
-        <item name="textColor">?android:attr/textColorPrimary</item>
-        <item name="textColorHighlight">?android:attr/textColorHighlight</item>
-        <item name="textColorHint">?android:attr/textColorHint</item>
-        <item name="textColorLink">?android:attr/textColorLink</item>
-        <item name="textSize">@dimen/nightmodeswitcher_textsize</item>
+        <item name="ocTextColor">?android:attr/textColorPrimary</item>
+        <item name="ocTextColorHighlight">?android:attr/textColorHighlight</item>
+        <item name="ocTextColorHint">?android:attr/textColorHint</item>
+        <item name="ocTextColorLink">?android:attr/textColorLink</item>
+        <item name="ocTextSize">@dimen/nightmodeswitcher_textsize</item>
     </style>   
 </resources>

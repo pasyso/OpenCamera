@@ -93,6 +93,7 @@ import com.almalence.opencam.R;
 import com.almalence.sony.cameraremote.SimpleStreamSurfaceView;
 import com.almalence.util.Util;
 import com.untwinedsolutions.base.provider.contentprovider.MpiMediaStore;
+import com.untwinedsolutions.base.provider.contentprovider.MpiProvider;
 
 /***
  * ApplicationScreen - main activity screen with camera functionality
@@ -280,6 +281,7 @@ abstract public class ApplicationScreen extends Activity implements ApplicationI
 	private final static int			STORAGE_PERMISSION_CODE			= 3;
 	protected static boolean			storagePermissionGranted		= false;
 
+	private static final String DEFAULT_SHUTTER_MODE = "photo1";
 	//mpi code start
 	public static final String EXTRA_SURVEY_ID = "extra:surveyId";
 	public static final String EXTRA_MODEL_ID = "extra:modelId";
@@ -287,10 +289,10 @@ abstract public class ApplicationScreen extends Activity implements ApplicationI
 	public static final String EXTRA_BUCKET_NAME = "extra:bucketName";
 	public static final String EXTRA_MODE = "extra:mode";
 	public static String saveToPath = null;
-	public static String shutterMode = "photo";
+	public static String shutterMode = DEFAULT_SHUTTER_MODE;
 	private String mSurveyId = null;
 	private Serializable mModelKey;
-	private Uri	mMainUri;
+	private Uri	mMainUri = Uri.withAppendedPath(MpiProvider.Media.CONTENT_URI, "survey.test");
 	private String mBucketName;
 
 	public Uri getMainUri() {
@@ -307,8 +309,7 @@ abstract public class ApplicationScreen extends Activity implements ApplicationI
 			mMainUri = extras.getParcelable(EXTRA_URI);
 //			if (mMainUri != null) Log.d("ApplicationScreen", "mMainUri = " + mMainUri);
 			mBucketName = extras.getString(EXTRA_BUCKET_NAME, null);
-			saveToPath = MpiMediaStore.Media.getStorageDirPath(this, mMainUri);
-			shutterMode = extras.getString(EXTRA_MODE, "photo");
+			shutterMode = extras.getString(EXTRA_MODE, DEFAULT_SHUTTER_MODE);
 //			Log.d("ApplicationScreen", "saveToPath = " + saveToPath);
 //            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 //			String path2 = prefs.getString(MainScreen.sSavePathPref, Environment.getExternalStorageDirectory()
@@ -316,10 +317,16 @@ abstract public class ApplicationScreen extends Activity implements ApplicationI
 //			prefs.edit().putString(MainScreen.sSavePathPref, saveToPath).apply();
 		}
 //		shutterMode = "video";
+		if (mMainUri != null) {
+			saveToPath = MpiMediaStore.Media.getStorageDirPath(this, mMainUri);
+		}
 		ConfigParser.getInstance().setVideoModeEnabled(isVideoEnabled());
 		if (saveToPath == null) {
 			saveToPath = Environment.getExternalStorageDirectory().getAbsolutePath();
 		}
+		Log.d("AppScreen",shutterMode);
+		Log.d("AppScreen",mMainUri.toString());
+//		Log.d("AppScreen",Uri.withAppendedPath(MpiProvider.Media.CONTENT_URI, "survey.test").toString());
 	}
 	public static boolean isVideoEnabled() {
 		return !"photo".equals(shutterMode);

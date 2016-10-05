@@ -88,6 +88,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.almalence.opencam.MainScreen;
 import com.almalence.ui.RotateImageView;
 import com.almalence.util.Util;
 
@@ -110,6 +111,7 @@ import com.almalence.opencam.PluginManager;
 import com.almalence.opencam.R;
 import com.almalence.opencam.cameracontroller.CameraController;
 import com.almalence.opencam.ui.GUI.ShutterButton;
+import com.untwinedsolutions.base.provider.contentprovider.MpiMediaStore;
 //-+- -->
 
 /***
@@ -1608,6 +1610,15 @@ public class VideoCapturePlugin extends PluginCapture
 		showRecording = false;
 	}
 
+	private void addMpiVideo(Uri uri, ContentValues values) {
+		try {
+			MpiMediaStore.addVideo(ApplicationScreen.instance.getContentResolver(), uri.getLastPathSegment(), values.getAsString(ImageColumns.DATA),
+					values.getAsString(VideoColumns.TITLE), MainScreen.instance.getBucketName(), values);
+		} catch (NullPointerException e) {
+			Log.e(TAG, e.getMessage());
+		}
+	}
+
 	protected void doExportVideo()
 	{
 		boolean onPause = this.onPause;
@@ -1688,6 +1699,7 @@ public class VideoCapturePlugin extends PluginCapture
 				values.put(VideoColumns.DATA, data);
 				Uri uri = ApplicationScreen.instance.getContentResolver().insert(Video.Media.EXTERNAL_CONTENT_URI,
 						values);
+				addMpiVideo(uri, values);
 				ApplicationScreen.getMainContext().sendBroadcast(new Intent(ACTION_NEW_VIDEO, uri));
 			}
 		} else
@@ -1778,6 +1790,7 @@ public class VideoCapturePlugin extends PluginCapture
 							values.put(VideoColumns.DATA, data);
 							Uri uri = ApplicationScreen.instance.getContentResolver().insert(Video.Media.EXTERNAL_CONTENT_URI,
 									values);
+							addMpiVideo(uri, values);
 							ApplicationScreen.getMainContext().sendBroadcast(new Intent(ACTION_NEW_VIDEO, uri));
 						}
 					} catch (Exception e)
@@ -1789,6 +1802,7 @@ public class VideoCapturePlugin extends PluginCapture
 			{
 				Uri uri = ApplicationScreen.instance.getContentResolver().insert(Video.Media.EXTERNAL_CONTENT_URI,
 						values);
+				addMpiVideo(uri, values);
 				ApplicationScreen.getMainContext().sendBroadcast(new Intent(ACTION_NEW_VIDEO, uri));
 			}
 		}

@@ -15,15 +15,15 @@
 	
     <attr name="ocTextAppearance" format="reference" />
   <declare-styleable name="OcTextAppearanceSwitch" >
-      	<attr name="textColor" format="color" />
-        <attr name="textSize" format="dimension"/>
-        <attr name="textStyle" format="reference"/>
-        <attr name="typeface" format="reference"/>
-        <attr name="fontFamily" format="reference"/>
-        <attr name="textColorHighlight" format="color"/>
-        <attr name="textColorHint" format="color" />
-        <attr name="textColorLink" format="color" />
-        <attr name="textAllCaps" format="boolean" />
+      	<attr name="ocTextColor" format="color" />
+        <attr name="ocTextSize" format="dimension"/>
+        <attr name="ocTextStyle" format="reference"/>
+        <attr name="ocTypeface" format="reference"/>
+        <attr name="ocFontFamily" format="reference"/>
+        <attr name="ocTextColorHighlight" format="color"/>
+        <attr name="ocTextColorHint" format="color" />
+        <attr name="ocTextColorLink" format="color" />
+        <attr name="ocTextAllCaps" format="boolean" />
     </declare-styleable>   
   
 </resources>

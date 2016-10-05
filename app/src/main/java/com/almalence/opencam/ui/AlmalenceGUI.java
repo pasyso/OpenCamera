@@ -118,6 +118,7 @@ import com.almalence.opencam.PluginManager;
 import com.almalence.opencam.PluginType;
 import com.almalence.opencam.Preferences;
 import com.almalence.opencam.R;
+import com.untwinedsolutions.mpicamera.ui.activities.ImageGridActivity;
 
 //-+- -->
 /* <!-- +++
@@ -1290,11 +1291,11 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 			{				
 				if (orientation == ORIENTATION_UNKNOWN)
 					return;
-				
+
 				//select initial value or check if current orientation belongs
 				if (Util.checkOrientationInterval(orientation))
 					return;
-				
+
 				boolean remapOrientation = Util.shouldRemapOrientation(orientationProc, rotation);
 
 				if (remapOrientation)
@@ -8136,14 +8137,13 @@ public class AlmalenceGUI extends GUI implements SeekBar.OnSeekBarChangeListener
 		ApplicationScreen.getPluginManager().sendMessage(ApplicationInterface.MSG_BROADCAST,
 				ApplicationInterface.MSG_STOP_CAPTURE);
 
-//		ApplicationScreen.instance.startActivity(new Intent(ApplicationScreen.instance, ImageGridActivity.class)
-//				.putExtra(ImageGridActivity.EXTRA_URI, uri)
-//				.putExtra(ImageGridActivity.EXTRA_IMAGE_DELETE_ENABLED, true));
-
-		Intent intent = new Intent("com.untwinedsolutions.mpicamera.action.IMAGE_GRID")
-					/*new Intent(ApplicationScreen.instance, c)*/
-				.putExtra("extra:Uri", uri)
-				.putExtra("extra:deleteEnabled", true);
+		Intent intent = new Intent(ApplicationScreen.instance, ImageGridActivity.class)
+				.putExtra(ImageGridActivity.EXTRA_URI, uri)
+				.putExtra(ImageGridActivity.EXTRA_IMAGE_DELETE_ENABLED, true);
+//		Intent intent = new Intent("com.untwinedsolutions.mpicamera.action.IMAGE_GRID")
+//					/*new Intent(ApplicationScreen.instance, c)*/
+//				.putExtra("extra:Uri", uri)
+//				.putExtra("extra:deleteEnabled", true);
 		if (intent.resolveActivity(ApplicationScreen.instance.getPackageManager()) != null) {
 			ApplicationScreen.instance.startActivity(intent);
 		} else {

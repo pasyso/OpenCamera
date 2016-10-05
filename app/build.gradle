@@ -17,7 +17,8 @@ android {
         exclude 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
     }
     defaultConfig {
-//        applicationId "com.almalence.opencam"
+        applicationId "com.almalence.opencam"
+//        applicationId 'com.untwinedsolutions.mpi'
         minSdkVersion 16
         targetSdkVersion 23
 
@@ -72,5 +73,10 @@ dependencies {
     compile(project(':base')) {
         exclude module: 'com.android.support:support-v13:23.4.0'
     }
-
+    compile(project(':mpicamera')) {
+        exclude module: 'com.android.support:appcompat-v7:23.4.0'
+        exclude module: ':base'
+        exclude module: ':themes'
+        exclude module: ':gesture-imageview'
+    }
 }

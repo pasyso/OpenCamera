@@ -738,11 +738,11 @@ public class SavingService extends NotificationService
 ////				sensorOrientation = (360 + sensorOrientation + (cameraMirrored ? -displayOrientation
 ////						: displayOrientation)) % 360;
 //				if (cameraMirrored) displayOrientation = -displayOrientation;
-//				
+//
 //				// Calculate desired JPEG orientation relative to camera orientation to make
 //				// the image upright relative to the device orientation
 //				orientation = (sensorOrientation + displayOrientation + 360) % 360;
-				
+
 				switch (orientation)
 				{
 				default:

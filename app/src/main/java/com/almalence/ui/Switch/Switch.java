@@ -227,7 +227,7 @@ public class Switch extends CompoundButton
 		ColorStateList colors;
 		int ts;
 
-		colors = appearance.getColorStateList(R.styleable.OcTextAppearanceSwitch_textColor);
+		colors = appearance.getColorStateList(R.styleable.OcTextAppearanceSwitch_ocTextColor);
 		if (colors != null)
 		{
 			mTextColors = colors;
@@ -238,7 +238,7 @@ public class Switch extends CompoundButton
 			mTextColors = getTextColors();
 		}
 
-		ts = appearance.getDimensionPixelSize(R.styleable.OcTextAppearanceSwitch_textSize, 0);
+		ts = appearance.getDimensionPixelSize(R.styleable.OcTextAppearanceSwitch_ocTextSize, 0);
 		if (ts != 0)
 		{
 			if (ts != mTextPaint.getTextSize())
@@ -250,12 +250,12 @@ public class Switch extends CompoundButton
 
 		int typefaceIndex, styleIndex;
 
-		typefaceIndex = appearance.getInt(R.styleable.OcTextAppearanceSwitch_typeface, -1);
-		styleIndex = appearance.getInt(R.styleable.OcTextAppearanceSwitch_textStyle, -1);
+		typefaceIndex = appearance.getInt(R.styleable.OcTextAppearanceSwitch_ocTypeface, -1);
+		styleIndex = appearance.getInt(R.styleable.OcTextAppearanceSwitch_ocTextStyle, -1);
 
 		setSwitchTypefaceByIndex(typefaceIndex, styleIndex);
 
-		boolean allCaps = appearance.getBoolean(R.styleable.OcTextAppearanceSwitch_textAllCaps, false);
+		boolean allCaps = appearance.getBoolean(R.styleable.OcTextAppearanceSwitch_ocTextAllCaps, false);
 		if (allCaps)
 		{
 			mSwitchTransformationMethod = new AllCapsTransformationMethod(getContext());

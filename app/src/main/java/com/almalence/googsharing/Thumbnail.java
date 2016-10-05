@@ -391,7 +391,6 @@ public class Thumbnail
 //				{
 //				}
 				
-				
 				// If we able to get File object, than get path from it.
 				// fileObject should not be null for files on phone memory.
 				File fileObject = Util.getFileFromDocumentFile(saveDir);

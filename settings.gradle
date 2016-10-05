@@ -1,1 +1,2 @@
-include ':app', ':base'
+//include ':app', ':base'
+include ':app', ':base', ':android-times-square', ':themes', ':mpicamera', ':gesture-imageview'
