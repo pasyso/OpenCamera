@@ -196,7 +196,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_almalence_plugins_processing_night_Al
 		{
 			// iso 100 = +0.1
 			// iso 800 = -0.05
-			fgamma += 0.09f - (log2f(iso) - 6.644f) * 0.165f/3.0f;
+			fgamma += 0.09f - (logf(iso) * 3.321928095f - 6.644f) * 0.165f/3.0f;//log2f replaced with logf(iso) * 3.321928095f for android <4.3
 		}
 
 		if (fgamma != 0.0f)
@@ -244,26 +244,21 @@ extern "C" JNIEXPORT jint JNICALL Java_com_almalence_plugins_processing_night_Al
 		case 100:		// Nexus 5
 			// slightly more sharpening and less filtering at low zooms
 			sharpen = 2;
-			if (zoomAbove15x) filter = 384;
-				else filter = 192;
 			break;
 
 		case 105:// Nexus 5X - same camera module as in Nexus 6p
 		case 106:// Nexus 6P
 			sharpen = 2;
-			if (zoomAbove15x) filter = 256;
-				else filter = 192;
 			break;
 
 		case 903:// HTC10
 			// use both edge enhancement and sharpening at high zoom levels
-			sharpen |= 1;
+			sharpen = 2;
 			break;
 
 		case 1005:// Galaxy S6
 			// do not use fine edge enhancement (looks too plastic on S6)
 			sharpen = 1;
-			filter = 288; // 256;
 			break;
 
 		case 1006:// Galaxy S7
@@ -272,10 +267,6 @@ extern "C" JNIEXPORT jint JNICALL Java_com_almalence_plugins_processing_night_Al
 			break;
 
 		case 2000:// OnePlus 2
-			if (zoomAbove15x) filter = 160;
-			break;
-		default:
-			__android_log_print(ANDROID_LOG_INFO, "CameraTest", "Error: Unknown camera");
 			break;
 		}
 		if (zoomAbove30x) sharpen = 0x80;	// fine edge enhancement instead of primitive sharpen at high zoom levels
@@ -284,12 +275,13 @@ extern "C" JNIEXPORT jint JNICALL Java_com_almalence_plugins_processing_night_Al
 		//		sensorGain, deGhostGain, filter, sharpen, nImages, cameraIndex);
 
 		int err = Super_Process(
-				yuv, NULL, &OutPic,
-				sx_zoom, sy_zoom, sx_zoom, sxo, syo, nImages,
+				yuv, NULL, &OutPic, NULL,
+				sx_zoom, sy_zoom, sx_zoom, sxo, syo, sxo, nImages,
 				iso,
 				filter,
 				sharpen,
 				fgamma,
+				4.5f,
 				cameraIndex,
 				0);							// externalBuffers
 
@@ -303,7 +295,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_almalence_plugins_processing_night_Al
 	else
 	{
 		BlurLess_Preview(&instance, yuv, NULL, NULL, NULL,
-			0, // 256*3,
+			256*3,
 			deghostTable[DeGhostPref], 1,
 			2, nImages, sx, sy, 0, nTable[noisePref], 1, 0, lumaEnh, chromaEnh, 0);
 
